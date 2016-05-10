@@ -1,6 +1,7 @@
 #ifndef HDR_H
 #define HDR_H
 #include <stdio.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,32 +19,32 @@
 
 /* Definición de funciones */
 //Imprime menú inicio.
-int menuInicio();
+int menuInicio(int width, int high);
 
 //Inicializa el tablero con el número de celulas dadas por user
-void inicializarTablero(bool array[][TAM_ARRAY], int numCelulas);
+void inicializarTablero(bool *array, int numCelulas, int width, int high);
 
 //Inicializa el tablero a 0s (celulas muertas)
-void establecerA0Tablero(bool array[][TAM_ARRAY]);
+void establecerA0Tablero(bool *array, int width, int high);
 
 //Para imprimir el tablero;
-void imprimeTablero(bool array[][TAM_ARRAY], int numCelulas);
+void imprimeTablero(bool *array, int width, int high);
 
 //Para analizar el tablero en cada iteración:
-void analizarTablero(bool array[][TAM_ARRAY],bool provisional[][TAM_ARRAY]);
+void analizarTablero(bool *array, bool *provisional, int width, int high);
 
 //Realiza la comprobación de las condiciones para vivir o morir de una célula:
-void comprobarCondiciones(int x, int j, bool array[][TAM_ARRAY], bool provisional[][TAM_ARRAY]);
+void comprobarCondiciones(int x, int j, bool *array, bool *provisional, int width, int high);
 
 //Cuenta las células vecinas vivas de otra dada:
-int cuentaVecinasVivas(int x, int j, bool array[][TAM_ARRAY]);
+int cuentaVecinasVivas(int i, int j, bool *array, int width, int high);
 
 //Para copiar un array en otro:
-void copiaArray(bool array[][TAM_ARRAY],bool arrayAcopiar[][TAM_ARRAY]);
+void copiaArray(bool *array, bool *arrayAcopiar, int width, int high);
 
 //Comprobar si una célula está dentro de los límites:
-bool estaDentroLimites(int x, int y);
+bool estaDentroLimites(int i, int j, int width, int high);
 
 //Para contar las celulas vivas del mundo:
-int contadorCelulasVivas(bool array[][TAM_ARRAY]);
+int contadorCelulasVivas(bool *array, int width, int high);
 #endif
