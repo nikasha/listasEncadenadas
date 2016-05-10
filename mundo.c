@@ -8,16 +8,45 @@ int menuInicio(int width, int high)
 	scanf("%4d",&num);
 	return num;
 }
-//Inicializamos la estructura de la lista con los valores por defecto:
-struct listaCelulas inicializaListaCelulas(struct listaCelulas *listaCelulas)
+
+//Libera memoria y elimina la lista:
+void free_lista(struct listaCelulas *celulas)
+{	
+	printf("%p->%d\n",celulas, celulas->tamanio);
+	if(!celulas)
+	{
+		struct celula *plista = celulas->inicio;
+		struct celula *celulaSiguiente = celulas->inicio->siguiente;
+		free(plista);
+		plista = celulaSiguiente;
+		if(!plista){
+			while(plista != celulas->inicio){
+				celulaSiguiente = plista->siguiente;
+				free(plista);
+				plista = celulaSiguiente;
+			}
+		}
+		free(celulas);
+	}
+}
+
+//Reserva memoria para la lista:
+void inicializaListaCelulas(struct listaCelulas *celulas)
 {
-	listaCelulas->inicio = NULL;
-	listaCelulas->fin = NULL;
-	listaCelulas->tamanio = 0;
+	celulas = (struct listaCelulas *) malloc (sizeof(struct listaCelulas));
+	if (!celulas) 
+    {
+    	perror("Error al reservar memoria para la Célula.");
+		exit(EXIT_FAILURE);
+	}
+	celulas->inicio = NULL;
+	celulas->fin = NULL;
+	celulas->tamanio = 0;
+	printf("%p->%d\n",celulas, celulas->tamanio);
 }
 
 //Añade el número de células vivas indicado por el usuario:
-void inicializaListaCelulasVivas(struct celula *celulasVivas, int numCelulas)
+void inicializaListaCelulasVivas(struct listaCelulas *celulasVivas, int numCelulas, int width, int high)
 {	
 	//Añadimos la semilla:
 	srand (time(NULL));
@@ -26,8 +55,8 @@ void inicializaListaCelulasVivas(struct celula *celulasVivas, int numCelulas)
 		/* Para obtener un número aleatorio:
 		numero = rand () % (N-M+1) + M;   // Este está entre M y N 
 		En nuestro caso: Entre 0 y width/high Para obtener dos coordenadas del tablero
-		donde introducir las células vivas: 
-		*/
+		donde introducir las células vivas: */
+		
 		int i= rand() %  high;
 		int j= rand() %  width;
 		//Establecemos celula como viva (la añadimos a la lista)
@@ -35,19 +64,43 @@ void inicializaListaCelulasVivas(struct celula *celulasVivas, int numCelulas)
 	}
 }
 
-void addCelulaViva(struct celula *celulasVivas, int numCelulas)
+//Añade célula a la lista:
+void addCelulaViva(struct listaCelulas *celulasVivas, int i, int j)
 {
-	if(!celulasVivas){
-
-	}else{
-
+	/* Con esta función añadimos un elemento al final de la lista */
+		struct celula *nuevo;
+      /* reservamos memoria para el nuevo elemento */
+      nuevo = (struct celula *) malloc (sizeof(struct celula));
+    if(nuevo == NULL) 
+    {
+      	perror("Error al reservar memoria para la Célula.");
+		exit(EXIT_FAILURE);
 	}
+    /* ahora metemos el nuevo elemento en la lista. lo situamos
+    al final de la lista.comprobamos si la lista está vacía. 
+    si primero==NULL es que no hay ningún elemento en la lista. También vale ultimo==NULL */
+    if (celulasVivas->inicio == NULL) 
+    {
+    	 /* el campo siguiente va a ser él mismo por ser el único elemento
+         de la lista */
+        nuevo->siguiente = celulasVivas->inicio;
+        celulasVivas->inicio = nuevo;
+        celulasVivas->fin = nuevo;
+        celulasVivas->tamanio = 0;        
+    }else{
+           /* el que hasta ahora era el último tiene que apuntar al nuevo */
+           celulasVivas->fin->siguiente = nuevo;
+           /* hacemos que el nuevo sea ahora el último */
+           celulasVivas->fin = nuevo;
+           /* hacemos que el nuevo último apunte su siguiente al primer elemento: */
+           celulasVivas->fin->siguiente = celulasVivas->inicio;
+           celulasVivas->tamanio++;
+    }
 }
-
+/*
 //Imprime tablero por consola:
-void imprimeTablero(bool *array, int width, int high)
+void imprimeTablero(struct listaCelulas *listaCelulas, int width, int high)
 {
-	int numCelulas = contadorCelulasVivas(array,width,high);
 	for(int i=0; i<high; i++){
 		for(int j=0; j<width; j++){
 			//printf("Elemento (%d,%d)-> %p\n", j, i, array+i*width+j);
@@ -62,8 +115,8 @@ void imprimeTablero(bool *array, int width, int high)
 		printf(" \n");
 	}
 	printf("\tLeyenda:\n\t");
-	printf(ANSI_COLOR_YELLOW "V: Célula Viva -> Vivas: %d\n" ANSI_COLOR_RESET, numCelulas);
-	printf(ANSI_COLOR_CYAN "\t- : Célula Muerta -> Muertas %d\n" ANSI_COLOR_RESET,width*high - numCelulas);
+	printf(ANSI_COLOR_YELLOW "V: Célula Viva -> Vivas: %d\n" ANSI_COLOR_RESET, listaCelulas->tamanio);
+	printf(ANSI_COLOR_CYAN "\t- : Célula Muerta -> Muertas %d\n" ANSI_COLOR_RESET,width*high - listaCelulas->tamanio);
 }
 
 //Realiza la iteración:
@@ -84,7 +137,7 @@ void comprobarCondiciones(int i, int j, bool *array, bool *provisional, int widt
 	int vecinas = 0;
 	/* Sabiendo que cada célula (i,j) tiene máximo 8 lindantes,
 	comprobando (i-1,j-1);(i-1,j);(i-1,j+1);(i,j-1); y
-	(i,j+1);(i+1,j-1);(i+1,j);(i+1,j+1); */
+	(i,j+1);(i+1,j-1);(i+1,j);(i+1,j+1); 
 	bool caso =*(array+i*width+j);
 	vecinas = cuentaVecinasVivas(i,j,array, width, high);
 	switch(caso){
@@ -140,3 +193,4 @@ bool estaDentroLimites(int i, int j, int width, int high)
 {
 	return  !(i>=high || i<0 || j>width || j<0);
 }
+*/

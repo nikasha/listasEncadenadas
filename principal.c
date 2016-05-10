@@ -28,12 +28,6 @@ int main(int argc, char **argv)
 		high = TAM_ARRAY;
 	//Preguntamos al usuario para insertar el nº de células inicial
 	int numeroCelulasVivas = menuInicio(width, high);
-	//Declaramos el Tablero de Células:
-	bool *mundo;
-	//Declaramos el mundo:
-	mundo = (bool *) malloc(width * high * sizeof(bool));
-	if(!mundo)
-		perror("Error al reservar memoria para mundo.");
 	
 	//Declaramos las 3 listas: Celulas Vivas, las que van a nacer y morir:
 	struct listaCelulas *celulasVivas = NULL;
@@ -55,8 +49,9 @@ int main(int argc, char **argv)
 		imprimeTablero(mundo, width, high);
 		printf("\n");
 	}
-	free(mundo);
-	free(provisional);
 	*/
+	free_lista(celulasVivas);
+	free_lista(celulasNacen);
+	free_lista(celulassMueren);
 	return 0;
 }

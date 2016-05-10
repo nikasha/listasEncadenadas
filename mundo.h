@@ -21,28 +21,20 @@ struct celula
 	{
 		int x;
 		int y;
-		struct lista *siguiente;
+		struct celula *siguiente;
 	}Celula;
 struct listaCelulas
-{
-	Celula *inicio;
-	Celula *fin;
-	int tamanio;
-}ListaCelulas;
+	{
+		struct celula *inicio;
+		struct celula *fin;
+		int tamanio;
+	}ListaCelulas;
 
 /* Definición de funciones */
 //Imprime menú inicio.
 int menuInicio(int width, int high);
 
-//Inicializa el tablero con el número de celulas dadas por user
-void inicializarTablero(bool *array, int numCelulas, int width, int high);
-
-//Inicializa el tablero a 0s (celulas muertas)
-void establecerA0Tablero(bool *array, int width, int high);
-
-//Para imprimir el tablero;
-void imprimeTablero(bool *array, int width, int high);
-
+/*
 //Para analizar el tablero en cada iteración:
 void analizarTablero(bool *array, bool *provisional, int width, int high);
 
@@ -52,12 +44,20 @@ void comprobarCondiciones(int x, int j, bool *array, bool *provisional, int widt
 //Cuenta las células vecinas vivas de otra dada:
 int cuentaVecinasVivas(int i, int j, bool *array, int width, int high);
 
-//Para copiar un array en otro:
-void copiaArray(bool *array, bool *arrayAcopiar, int width, int high);
-
 //Comprobar si una célula está dentro de los límites:
 bool estaDentroLimites(int i, int j, int width, int high);
 
-//Para contar las celulas vivas del mundo:
-int contadorCelulasVivas(bool *array, int width, int high);
+*/
+//Reserva memoria para la lista:
+void inicializaListaCelulas(struct listaCelulas *celulas);
+
+//Añade el número de células vivas indicado por el usuario:
+void inicializaListaCelulasVivas(struct listaCelulas *celulasVivas, int numCelulas, int width, int high);
+
+//Añade célula a la lista:
+void addCelulaViva(struct listaCelulas *celulasVivas, int i, int j);
+
+//Libera memoria y elimina la lista:
+void free_lista(struct listaCelulas *celulas);
+
 #endif
