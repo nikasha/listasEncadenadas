@@ -30,22 +30,22 @@ int main(int argc, char **argv)
 	int numeroCelulasVivas = menuInicio(width, high);
 	//Declaramos el Tablero de Células:
 	bool *mundo;
-	bool *provisional;
 	//Declaramos el mundo:
 	mundo = (bool *) malloc(width * high * sizeof(bool));
 	if(!mundo)
 		perror("Error al reservar memoria para mundo.");
-	//Declaramos el mundo provisional:
-	provisional = (bool *) malloc(width * high * sizeof(bool));
-	if(!provisional){
-		free(mundo);
-		perror("Error al reservar memoria para mundo.");
-	}
-	//Establecemos a 0 (Muertas) todas las células:
-	establecerA0Tablero(mundo, width, high);
-	//Inicializamos tablero a 0s:
-	inicializarTablero(mundo,numeroCelulasVivas, width, high);
-	imprimeTablero(mundo, width, high);
+	
+	//Declaramos las 3 listas: Celulas Vivas, las que van a nacer y morir:
+	struct listaCelulas *celulasVivas = NULL;
+	struct listaCelulas *celulasNacen = NULL;
+	struct listaCelulas *celulassMueren = NULL;
+	inicializaListaCelulas(celulasVivas);
+	inicializaListaCelulas(celulasNacen);
+	inicializaListaCelulas(celulassMueren);
+/*
+	//Inicializamos tablero:
+	inicializarTablero(celulasVivas,numeroCelulasVivas, width, high);
+	imprimeTablero(celulasVivas, width, high);
 	//Iteramos:
 	for(int iteracion = 0; iteracion < ITERACION; iteracion++){
 		//Analizamos el tablero y en provisional guardamos los cambios.
@@ -57,5 +57,6 @@ int main(int argc, char **argv)
 	}
 	free(mundo);
 	free(provisional);
+	*/
 	return 0;
 }

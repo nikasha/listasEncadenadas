@@ -16,6 +16,19 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+//Definición de Estructuras:
+struct celula
+	{
+		int x;
+		int y;
+		struct lista *siguiente;
+	}Celula;
+struct listaCelulas
+{
+	Celula *inicio;
+	Celula *fin;
+	int tamanio;
+}ListaCelulas;
 
 /* Definición de funciones */
 //Imprime menú inicio.

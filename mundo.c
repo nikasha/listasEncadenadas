@@ -8,18 +8,16 @@ int menuInicio(int width, int high)
 	scanf("%4d",&num);
 	return num;
 }
-
-//Inicializa el Tablero con todas las células muertas:
-void establecerA0Tablero(bool *array, int width, int high)
+//Inicializamos la estructura de la lista con los valores por defecto:
+struct listaCelulas inicializaListaCelulas(struct listaCelulas *listaCelulas)
 {
-	//Establecemos a falso (como muertas) todas las células:
-	for(int i=0;i<high;i++)
-		for(int j=0;j<width;j++)
-			*(array+i*width+j) = false;
+	listaCelulas->inicio = NULL;
+	listaCelulas->fin = NULL;
+	listaCelulas->tamanio = 0;
 }
 
-//Inicializa el tablero con el número de células indicado por el usuario:
-void inicializarTablero(bool *array, int numCelulas, int width, int high)
+//Añade el número de células vivas indicado por el usuario:
+void inicializaListaCelulasVivas(struct celula *celulasVivas, int numCelulas)
 {	
 	//Añadimos la semilla:
 	srand (time(NULL));
@@ -32,10 +30,17 @@ void inicializarTablero(bool *array, int numCelulas, int width, int high)
 		*/
 		int i= rand() %  high;
 		int j= rand() %  width;
-		//Establecemos celula como viva (true)
-		//*(array+i*j)  = true;
-		//*(array) = true;
-		*(array+j+i*width) = true;
+		//Establecemos celula como viva (la añadimos a la lista)
+		addCelulaViva(celulasVivas,i,j);
+	}
+}
+
+void addCelulaViva(struct celula *celulasVivas, int numCelulas)
+{
+	if(!celulasVivas){
+
+	}else{
+
 	}
 }
 
@@ -59,15 +64,6 @@ void imprimeTablero(bool *array, int width, int high)
 	printf("\tLeyenda:\n\t");
 	printf(ANSI_COLOR_YELLOW "V: Célula Viva -> Vivas: %d\n" ANSI_COLOR_RESET, numCelulas);
 	printf(ANSI_COLOR_CYAN "\t- : Célula Muerta -> Muertas %d\n" ANSI_COLOR_RESET,width*high - numCelulas);
-}
-
-//Para copiar un array en otro:
-void copiaArray(bool *array, bool *arrayAcopiar, int width, int high)
-{
-	//Copiamos el tablero en provisional:
-	for (int i = 0; i < high; ++i)
-		for(int j = 0; j < width ; j++)
-			*(array+i*width+j) =  *(arrayAcopiar+i*width+j);
 }
 
 //Realiza la iteración:
@@ -143,15 +139,4 @@ int cuentaVecinasVivas(int i, int j, bool *array, int width, int high)
 bool estaDentroLimites(int i, int j, int width, int high)
 {
 	return  !(i>=high || i<0 || j>width || j<0);
-}
-
-//Contador de celulas vivas:
-int contadorCelulasVivas(bool *array, int width, int high)
-{
-	int contador = 0;
-	for(int i = 0; i < high; i++)
-		for(int j = 0; j < width; j++)
-			if(*(array+i*width+j))
-				contador++;	
-	return contador;
 }
