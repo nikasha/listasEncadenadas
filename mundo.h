@@ -29,10 +29,22 @@ struct listaCelulas
 		struct celula *fin;
 		int tamanio;
 	}ListaCelulas;
+struct mundo
+	{
+		struct listaCelulas *celulasVivas;
+		struct listaCelulas *celulasNacen;
+		struct listaCelulas *celulasMueren;
+		int width;
+		int high;
+	}Mundo;
 
 /* Definición de funciones */
 //Imprime menú inicio.
 int menuInicio(int width, int high);
+
+//Para comprobar errores de reserva de memoria (1 si da error y 0 e.o.c):
+int compruebaError(void *p);
+
 
 /*
 //Para analizar el tablero en cada iteración:
@@ -49,7 +61,7 @@ bool estaDentroLimites(int i, int j, int width, int high);
 
 */
 //Reserva memoria para la lista:
-void inicializaListaCelulas(struct listaCelulas *celulas);
+struct listaCelulas * inicializaListaCelulas();
 
 //Añade el número de células vivas indicado por el usuario:
 void inicializaListaCelulasVivas(struct listaCelulas *celulasVivas, int numCelulas, int width, int high);

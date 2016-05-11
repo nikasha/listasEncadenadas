@@ -12,37 +12,30 @@ int menuInicio(int width, int high)
 //Libera memoria y elimina la lista:
 void free_lista(struct listaCelulas *celulas)
 {	
-	printf("%p->%d\n",celulas, celulas->tamanio);
-	if(!celulas)
-	{
 		struct celula *plista = celulas->inicio;
-		struct celula *celulaSiguiente = celulas->inicio->siguiente;
-		free(plista);
-		plista = celulaSiguiente;
-		if(!plista){
+		if(plista){
+			struct celula *celulaSiguiente = celulas->inicio->siguiente;
+			free(plista);
+			plista = celulaSiguiente;
 			while(plista != celulas->inicio){
-				celulaSiguiente = plista->siguiente;
-				free(plista);
-				plista = celulaSiguiente;
+					celulaSiguiente = plista->siguiente;
+					free(plista);
+					plista = celulaSiguiente;
 			}
 		}
 		free(celulas);
-	}
+		printf("%p Libero Célula\n", celulas);
 }
 
 //Reserva memoria para la lista:
-void inicializaListaCelulas(struct listaCelulas *celulas)
+struct listaCelulas * inicializaListaCelulas()
 {
-	celulas = (struct listaCelulas *) malloc (sizeof(struct listaCelulas));
-	if (!celulas) 
-    {
-    	perror("Error al reservar memoria para la Célula.");
-		exit(EXIT_FAILURE);
-	}
+	struct listaCelulas *celulas = (struct listaCelulas *) malloc (sizeof(struct listaCelulas));
+	compruebaError(celulas);
 	celulas->inicio = NULL;
 	celulas->fin = NULL;
 	celulas->tamanio = 0;
-	printf("%p->%d\n",celulas, celulas->tamanio);
+	return celulas;
 }
 
 //Añade el número de células vivas indicado por el usuario:
@@ -68,14 +61,10 @@ void inicializaListaCelulasVivas(struct listaCelulas *celulasVivas, int numCelul
 void addCelulaViva(struct listaCelulas *celulasVivas, int i, int j)
 {
 	/* Con esta función añadimos un elemento al final de la lista */
-		struct celula *nuevo;
-      /* reservamos memoria para el nuevo elemento */
-      nuevo = (struct celula *) malloc (sizeof(struct celula));
-    if(nuevo == NULL) 
-    {
-      	perror("Error al reservar memoria para la Célula.");
-		exit(EXIT_FAILURE);
-	}
+	struct celula *nuevo;
+    /* reservamos memoria para el nuevo elemento */
+    nuevo = (struct celula *) malloc (sizeof(struct celula));
+    compruebaError(nuevo);
     /* ahora metemos el nuevo elemento en la lista. lo situamos
     al final de la lista.comprobamos si la lista está vacía. 
     si primero==NULL es que no hay ningún elemento en la lista. También vale ultimo==NULL */
@@ -96,6 +85,15 @@ void addCelulaViva(struct listaCelulas *celulasVivas, int i, int j)
            celulasVivas->fin->siguiente = celulasVivas->inicio;
            celulasVivas->tamanio++;
     }
+}
+
+//Para comprobar errores de reserva de memoria (1 si da error y 0 e.o.c):
+int compruebaError(void *p)
+{
+	if(!p)
+		perror("Error al reservar memoria!");
+	return p == NULL;
+
 }
 /*
 //Imprime tablero por consola:

@@ -7,6 +7,8 @@ int main(int argc, char **argv)
 	/* Cadena de caracter que guarda el path del archivo que contiene
 	la sesion anteriormente jugada y guardada del mundo */
 	char *directorio = "";//la cadena debe ir pegada a d(por consola)
+	struct mundo *mundo = (struct mundo *) malloc(sizeof(struct mundo));
+	compruebaError(mundo);
 	while((c = getopt( argc, argv, "w:h:d::"))!=-1){
 		switch(c){
 			case 'w':
@@ -30,12 +32,16 @@ int main(int argc, char **argv)
 	int numeroCelulasVivas = menuInicio(width, high);
 	
 	//Declaramos las 3 listas: Celulas Vivas, las que van a nacer y morir:
-	struct listaCelulas *celulasVivas = NULL;
-	struct listaCelulas *celulasNacen = NULL;
-	struct listaCelulas *celulassMueren = NULL;
-	inicializaListaCelulas(celulasVivas);
-	inicializaListaCelulas(celulasNacen);
-	inicializaListaCelulas(celulassMueren);
+	struct listaCelulas *celulasVivas = inicializaListaCelulas();
+	struct listaCelulas *celulasNacen = inicializaListaCelulas();
+	struct listaCelulas *celulassMueren = inicializaListaCelulas();
+	printf("%p->%d\n",celulasVivas, celulasVivas->tamanio);
+	printf("%p->%d\n",celulasNacen, celulasNacen->tamanio);
+	printf("%p->%d\n",celulassMueren, celulasNacen->tamanio);
+	free_lista(celulasVivas);
+	free_lista(celulasNacen);
+	free_lista(celulassMueren);
+	free(mundo);
 /*
 	//Inicializamos tablero:
 	inicializarTablero(celulasVivas,numeroCelulasVivas, width, high);
@@ -49,9 +55,6 @@ int main(int argc, char **argv)
 		imprimeTablero(mundo, width, high);
 		printf("\n");
 	}
-	*/
-	free_lista(celulasVivas);
-	free_lista(celulasNacen);
-	free_lista(celulassMueren);
+*/
 	return 0;
 }
