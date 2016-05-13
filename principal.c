@@ -30,18 +30,24 @@ int main(int argc, char **argv)
 		high = TAM_ARRAY;
 	//Preguntamos al usuario para insertar el nº de células inicial
 	int numeroCelulasVivas = menuInicio(width, high);
-	
+	mundo->width = width;
+	mundo->high = high;
 	//Declaramos las 3 listas: Celulas Vivas, las que van a nacer y morir:
 	struct listaCelulas *celulasVivas = inicializaListaCelulas();
 	struct listaCelulas *celulasNacen = inicializaListaCelulas();
-	struct listaCelulas *celulassMueren = inicializaListaCelulas();
+	struct listaCelulas *celulasMueren = inicializaListaCelulas();
+	mundo->celulasVivas = celulasVivas;
+	mundo->celulasNacen = celulasNacen;
+	mundo->celulasMueren = celulasMueren;
+	inicializaListaCelulasVivas(mundo,numeroCelulasVivas);
+	imprimeMundo(mundo);
+	printf("%d\n", cuentaVecinas(mundo, 0, 0));
+	/*
 	printf("%p->%d\n",celulasVivas, celulasVivas->tamanio);
 	printf("%p->%d\n",celulasNacen, celulasNacen->tamanio);
-	printf("%p->%d\n",celulassMueren, celulasNacen->tamanio);
-	free_lista(celulasVivas);
-	free_lista(celulasNacen);
-	free_lista(celulassMueren);
-	free(mundo);
+	printf("%p->%d\n",celulasMueren, celulasNacen->tamanio);
+	*/
+	mundo_free(mundo);
 /*
 	//Inicializamos tablero:
 	inicializarTablero(celulasVivas,numeroCelulasVivas, width, high);

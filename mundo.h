@@ -19,8 +19,8 @@
 //Definición de Estructuras:
 struct celula
 	{
-		int x;
-		int y;
+		int i;
+		int j;
 		struct celula *siguiente;
 	}Celula;
 struct listaCelulas
@@ -45,6 +45,8 @@ int menuInicio(int width, int high);
 //Para comprobar errores de reserva de memoria (1 si da error y 0 e.o.c):
 int compruebaError(void *p);
 
+//Libera Mundo:
+void mundo_free(struct mundo * mundo);
 
 /*
 //Para analizar el tablero en cada iteración:
@@ -60,14 +62,23 @@ int cuentaVecinasVivas(int i, int j, bool *array, int width, int high);
 bool estaDentroLimites(int i, int j, int width, int high);
 
 */
+//Contador de células Vecinas Vivas:
+int cuentaVecinasVivas(struct mundo *mundo, int i, int j);
+
+//Comprueba si una celula esta en la lista:
+bool estaCelulaEnLista(struct listaCelulas *celulas, int i, int j);
+
+//Imprime mundo:
+void imprimeMundo(struct mundo *mundo);
+
 //Reserva memoria para la lista:
 struct listaCelulas * inicializaListaCelulas();
 
 //Añade el número de células vivas indicado por el usuario:
-void inicializaListaCelulasVivas(struct listaCelulas *celulasVivas, int numCelulas, int width, int high);
+void inicializaListaCelulasVivas(struct mundo *mundo, int numCelulas);
 
 //Añade célula a la lista:
-void addCelulaViva(struct listaCelulas *celulasVivas, int i, int j);
+int addCelula(struct listaCelulas *celulasVivas, int i, int j);
 
 //Libera memoria y elimina la lista:
 void free_lista(struct listaCelulas *celulas);
